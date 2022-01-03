@@ -2,10 +2,10 @@
 
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import Ridge
+# from sklearn.linear_model import Ridge
 import joblib
 from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
+# from sklearn.model_selection import train_test_split
 
 import logging
 
@@ -28,12 +28,12 @@ def change_data_types(df):
     """change data types for better manage"""
 
     # cm
-    df["height"] = df["height"].str.extract("(\d+)").astype(int)
+    df["height"] = df["height"].str.extract("(\\d+)").astype(int)
     # kg
-    df["weight"] = df["weight"].str.extract("(\d+)").astype(int)
+    df["weight"] = df["weight"].str.extract("(\\d+)").astype(int)
     # euros
-    df["Value"] = pd.to_numeric(df["Value"].str.replace("€|\.", "", regex=True))
-    df["Wage"] = pd.to_numeric(df["Wage"].str.replace("€|\.", "", regex=True))
+    df["Value"] = pd.to_numeric(df["Value"].str.replace("€|\\.", "", regex=True))
+    df["Wage"] = pd.to_numeric(df["Wage"].str.replace("€|\\.", "", regex=True))
 
     return df
 
