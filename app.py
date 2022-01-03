@@ -12,7 +12,7 @@ LOG.setLevel(logging.INFO)
 
 @app.route("/")
 def home():
-    html = f"<h3>Predict the Value From skills of FIFA Players</h3>"
+    html = "<h3>Predict the Value From skills of FIFA Players</h3>"
     return html.format(format)
 
 
