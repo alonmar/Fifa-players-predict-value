@@ -5,7 +5,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
         python-version: ['3.8', '3.10']
         exclude:
           - os: macos-latest
@@ -21,13 +21,14 @@ jobs:
     - name: Install dependencies
       run: |
         make install
+    - name: Format code
+      run: |
+        make format
     - name: Lint with pylint
       run: |
         make lint
     - name: Test with pytest
       run: |
         make test
-    - name: Format code
-      run: |
-        make format
+    
         
