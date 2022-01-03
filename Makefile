@@ -9,7 +9,7 @@ format:
 	black *.py
 
 lint:
-	pylint --disable=R,C,W1203,E1101 mlib cli utilscli app
+	pylint --disable=R,C,W1203,E1101 mlib cli app
 	#lint Dockerfile
 	#docker run --rm -i hadolint/hadolint < Dockerfile
 	
