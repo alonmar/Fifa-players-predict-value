@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify
 from flask.logging import create_logger
 import logging
 import pandas as pd
-
 import mlib
 
 app = Flask(__name__)
