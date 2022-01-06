@@ -2,10 +2,17 @@
 
 import numpy as np
 import pandas as pd
+
 # from sklearn.linear_model import Ridge
 import joblib
-from sklearn.preprocessing import StandardScaler
+
 # from sklearn.model_selection import train_test_split
+
+# Models
+from xgboost import XGBRegressor
+from sklearn.model_selection import train_test_split, RandomizedSearchCV
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_squared_error
 
 import logging
 
@@ -96,6 +103,58 @@ def clean_data():
     df = one_hot_coding(df)
 
     return df
+
+
+def retrain(tsize=0.2, model_name="model.joblib"):
+    """Retrains the model
+
+    See this notebook: Baseball_Predictions_Export_Model.ipynb
+    """
+    df = clean_data()
+    y = df["Value"].values  # Target
+    # Transform to log
+    y = np.log(y)
+    y = y.reshape(-1, 1)
+    X = df.drop(columns=["Value"])  # Feature(s)
+
+    scaler = StandardScaler()
+    X_scaler = scaler.fit(X)
+    X = X_scaler.transform(X)
+    y_scaler = scaler.fit(y)
+    y = y_scaler.transform(y)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=tsize, random_state=3
+    )
+
+    parameters = {
+        "param_distributions": {
+            "max_depth": [3, 6, 10],
+            "learning_rate": [0.01, 0.05, 0.1, 0.3, 0.5],
+            "n_estimators": [100, 500, 1000],
+            "colsample_bytree": [0.7, 0.5],
+        },
+        "scoring": "neg_mean_squared_error",
+        "verbose": 3,
+        "n_jobs": -1,
+    }
+
+    xgb_model = XGBRegressor(seed=20)
+    xgb_grid = RandomizedSearchCV(estimator=xgb_model, **parameters)
+    model = xgb_grid.fit(X_train, y_train)
+    accuracy = model.score(X_test, y_test)
+    predictions = model.predict(X_test)
+
+    logging.debug(f"fit_model.best_params: {model.best_params_}")
+    rmse_xgb_reg = mean_squared_error(
+        y_scaler.inverse_transform(y_test),
+        y_scaler.inverse_transform(predictions.reshape(-1, 1)),
+        squared=False,
+    )
+
+    print(f"The RMSE for xgb_reg is: {rmse_xgb_reg}")
+    print(model.best_params_)
+    # joblib.dump(model, model_name)
+    return accuracy, model_name
 
 
 def scale_input(pX, df):
