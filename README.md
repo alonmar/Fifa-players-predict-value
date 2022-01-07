@@ -32,7 +32,7 @@ To predict the height of an MLB player you use the following: *(if you don't run
 The second cli tool is `utilscli.py` and this perform model retraining, and could serve as the entry point to do more things.
 For example, this version doesn't change the default `model_name`, but you could add that as an option by forking this repo.
 
-`python ./utilscli.py retrain --tsize 0.2`
+`$ python ./utilscli.py retrain --tsize 0.2`
 
 ![model-retraining](https://user-images.githubusercontent.com/36181705/148481027-cb825882-ae04-4df1-b9ec-dcc3a08dbb5e.png)
 
@@ -45,7 +45,7 @@ The Flask ML Microservice can be run many ways.
 
 You can run the Flask Microservice as follows with the commmand:
 
-`python app.py`
+`$ python app.py runserver`
 
 ![flask-local](https://user-images.githubusercontent.com/36181705/148481892-c15c9703-c27a-494d-9bfb-324625af5fd1.png)
 
