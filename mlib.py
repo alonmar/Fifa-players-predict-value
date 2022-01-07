@@ -1,12 +1,8 @@
 """MLOps Library"""
 
+# Handling data
 import numpy as np
 import pandas as pd
-
-# from sklearn.linear_model import Ridge
-import joblib
-
-# from sklearn.model_selection import train_test_split
 
 # Models
 from xgboost import XGBRegressor
@@ -14,6 +10,10 @@ from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error
 
+# Model export
+import joblib
+
+# logging
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -27,6 +27,7 @@ def load_model(model="model.joblib"):
 
 
 def data():
+    """Read data"""
     df = pd.read_json("webscrapi_fifa_players/data_fifa_players.json")
     return df
 
@@ -46,12 +47,12 @@ def change_data_types(df):
 
 
 def get_position_zone(df):
+    """Transform 'preferred_positions' to 'position_zone'"""
     position_zone = []
     for x in df["preferred_positions"]:
 
         listb = {"DEFENDING": 0, "MIDFIELD": 0, "ATTACKING": 0, "GOALKEEPER": 0}
         for y in x:
-            # print(y)
             if y in ["GK"]:
                 listb["GOALKEEPER"] = 1
             else:
@@ -62,6 +63,7 @@ def get_position_zone(df):
                 if y in ["LB", "LWB", "RB", "RWB", "CB"]:
                     listb["DEFENDING"] = listb["DEFENDING"] + 1
 
+        # Keep the position with the highest value
         position_zone.append(max(listb, key=listb.get))
 
     df.loc[:, "position_zone"] = position_zone
@@ -107,7 +109,6 @@ def clean_data():
 
 def retrain(tsize=0.2, model_name="model.joblib"):
     """Retrains the model
-
     See this notebook: Baseball_Predictions_Export_Model.ipynb
     """
     df = clean_data()
@@ -152,13 +153,14 @@ def retrain(tsize=0.2, model_name="model.joblib"):
     )
 
     print(f"The RMSE for xgb_reg is: {rmse_xgb_reg}")
-    print(model.best_params_)
+    print(f"Best params are: {model.best_params_}")
+    # We can write the new model
     # joblib.dump(model, model_name)
     return accuracy, model_name
 
 
 def scale_input(pX, df):
-
+    """Scales values for input"""
     df = df.drop(columns=["Value"])
     input_scaler = StandardScaler().fit(df)
     scaled_input = input_scaler.transform(pX)
@@ -196,15 +198,6 @@ def predict(pX):
     df = clean_data()
     scaled_input_result = scale_input(pX, df)  # scale feature input
     scaled_height_prediction = clf.predict(scaled_input_result)  # scaled prediction
-    value_predict = scale_target(scaled_height_prediction, df)
-    # payload = human_readable_payload(height_predict)
-    # predict_log_data = {
-    #    "weight": weight,
-    #    "scaled_input_result": scaled_input_result,
-    #    "scaled_height_prediction": scaled_height_prediction,
-    #    "height_predict": height_predict,
-    #    "human_readable_payload": payload,
-    # }
-    # logging.debug(f"Prediction: {predict_log_data}")
+    value_predict = scale_target(scaled_height_prediction, df)  # predict value
     result = human_readable_payload(value_predict)
     return result
