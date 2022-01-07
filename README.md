@@ -6,7 +6,7 @@
 ## Assets in repo
 
 * `requirements.txt`:  [View requirements.txt](https://github.com/alonmar/Fifa-players-predict-value/blob/main/requirements.txt)
-* `Futbol_Predictions_Export_Model.ipynb`: [View eda.ipynb](https://github.com/alonmar/Fifa-players-predict-value/blob/main/Futbol_Predictions_Export_Model.ipynb) EDA and Export model
+* `Futbol_Predictions_Export_Model.ipynb`: [View Futbol_Predictions_Export_Model.ipynb](https://github.com/alonmar/Fifa-players-predict-value/blob/main/Futbol_Predictions_Export_Model.ipynb) EDA and Export model
 * `data_fifa_players.json`: [View data](https://github.com/alonmar/Fifa-players-predict-value/blob/main/webscrapi_fifa_players/data_fifa_players.json) Data scraping
 * `model.joblib`: [View model.joblib](https://github.com/alonmar/Fifa-players-predict-value/blob/main/model.joblib) Exported Model 
 * `app.py`:  [View app.py](https://github.com/alonmar/Fifa-players-predict-value/blob/main/app.py) Flask api
