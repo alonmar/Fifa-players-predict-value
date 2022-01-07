@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+
+"""MLOps Library"""
+
 import click
 from mlib import predict
 import json
@@ -9,11 +12,11 @@ import pandas as pd
 @click.option(
     "--skills",
     prompt="Fifa Player skills",
-    help="Pass in the weight of a MLB player to predict the height",
+    help="Pass the skills of a Fifa player to predict the Value",
 )
-def predictcli(weight):
+def predictcli(skills):
     """Predicts Value of an Fifa player based on skills"""
-    data_to_predict = json.loads(weight)
+    data_to_predict = json.loads(skills)
     data_to_predict = pd.DataFrame(data_to_predict)
 
     result = predict(data_to_predict)
